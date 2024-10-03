@@ -4,7 +4,7 @@ const config = {
 
     },
     db: {
-        uri: process.env.MONGODB_URI || "mongodb+srv://BackEnd2:<Backend2>@cluster0.4zavj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+        uri: process.env.MONGODB_URI || "mongodb://localhost:27017/ContactBook"
     }
 };
 module.exports = config;

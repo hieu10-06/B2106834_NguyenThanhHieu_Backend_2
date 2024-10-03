@@ -1,8 +1,8 @@
-const { ObjectID, ReturnDocument } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 class ContactService {
     constructor(client) {
-        this.Contact = client.db().collection("Contacts");
+        this.Contact = client.db().collection("Contact");
 
     }
     extractContactData(payload) {
@@ -14,7 +14,7 @@ class ContactService {
             favorite: payload.favorite,
         };
         Object.keys(contact).forEach(
-            (ket) => contact[key] === undefined && delete contact[key]
+            (key) => contact[key] === undefined && delete contact[key]
         );
         return contact;
     }
@@ -26,7 +26,7 @@ class ContactService {
                 $set: { favorite: contact.favorite === true }
             },
             {
-                ReturnDocument: "after", upsert: true
+                returnDocument: "after", upsert: true
             }
         );
         return result;
@@ -43,25 +43,25 @@ class ContactService {
 
     async findById(id) { 
         return await this.Contact.findOne({
-            _id: ObjectID.isValid(id) ? new ObjectID(id) : null,
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
     }
     async update(id, payload) {
         const filter = {
-            _id: ObjectID.isValid(id) ? new ObjectID(id) : null,
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         };
         const update = this.extractContactData(payload);
         const result = await this.Contact.findOneAndUpdate(
             filter,
             { $set: update },
-            { ReturnDocument: "after" }
+            { returnDocument: "after" }
         );
-        return result.value;
+        return result;
     }
     
     async delete(id) {
         const result = await this.Contact.findOneAndDelete({
-            _id: ObjectID.isValid(id) ? new ObjectID(id) : null,
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
         return result;
     }
